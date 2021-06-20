@@ -167,7 +167,40 @@ int high_mass(){
     int n = tree->GetEntries();
 
     double mass, mass_acc, rec_mass;
+    auto pmom = new TVector3(0.0, 0.0, 0.0);
+    auto nmom = new TVector3(0.0, 0.0, 0.0);
 
+    tree->SetBranchAddress("mass", &mass);
+    tree->SetBranchAddress("mass_acc", &mass_acc);
+    tree->SetBranchAddress("rec_mass", &rec_mass);
+    tree->SetBranchAddress("pmom", &pmom);
+    tree->SetBranchAddress("nmom", &nmom);
+
+    auto hist1 = new TH2F("hist1",
+                          "acc. mass vs. momentum; acc. mass(GeV/c^{2}); mom (GeV/c)",
+                          20, 7.0, 10.0, 50, 20.0, 140.0);
+
+    auto hist2 = new TH2F("hist2",
+                          "rec. mass vs. momentum; rec. mass(GeV/c^{2}); mom (GeV/c)",
+                          20, 7.0, 10.0, 50, 20.0, 140.0);
+
+    for(int i = 0; i < n; i++){
+        tree->GetEntry(i);
+        if(mass > 7.0){
+            hist1->Fill(mass_acc, (*pmom+*nmom).Mag());
+            if(rec_mass > 0.0){
+                hist2->Fill(rec_mass, (*pmom+*nmom).Mag());
+            }
+        }
+    }
+
+    auto can1 = new TCanvas();can1->SetGrid();
+    hist1->Draw("COLZ TEXT");
+    can1->SaveAs("pic11.png");
+
+    auto can2 = new TCanvas();can2->SetGrid();
+    hist2->Draw("COLZ TEXT");
+    can2->SaveAs("pic12.png");
 
     return 0;
 }
@@ -178,10 +211,13 @@ int main(){
     //plots_vtx();
 
     //plots of efficiency
-    effi_plots();
+    //effi_plots();
 
     // mass distributions
     //plot_mass();
+
+    // high mass ditributions
+    high_mass();
 
     return 0;
 }
