@@ -8,14 +8,34 @@
 #include <TCanvas.h>
 #include <TH1F.h>
 #include <TH2F.h>
+#include <TChain.h>
 #include <TEfficiency.h>
 #include <iostream>
 
 using namespace std;
 
+// combine mutiple files
+int com_file(){
+    TChain* chain1 = new TChain("dim");
+    TChain* chain2 = new TChain("trk");
+
+    chain1->AddFile("data2.root");
+    chain1->AddFile("data3.root");
+
+    chain2->AddFile("data2.root");
+    chain2->AddFile("data3.root");
+
+    TFile* file = TFile::Open("data.root", "RECREATE");
+    chain1->CloneTree(-1, "fast");
+    chain2->CloneTree(-1, "fast");
+    file -> Write();
+
+    return 0;
+}
+
 // plots at vertex
 int plots_vtx(){
-    TFile* file = TFile::Open("data2.root");
+    TFile* file = TFile::Open("data.root");
     auto tree = (TTree*)file->Get("dim");
     int n = tree->GetEntries();
 
@@ -73,7 +93,7 @@ int plots_vtx(){
 
 // efficiency plots
 int effi_plots(){
-    TFile* file = TFile::Open("data2.root");
+    TFile* file = TFile::Open("data.root");
     auto tree = (TTree*)file->Get("dim");
     int n = tree->GetEntries();
 
@@ -118,7 +138,7 @@ int effi_plots(){
 
 // mass distributions with different variables
 int plot_mass(){
-    TFile* file = TFile::Open("data2.root");
+    TFile* file = TFile::Open("data.root");
     auto tree = (TTree*)file->Get("dim");
     int n = tree->GetEntries();
 
@@ -163,7 +183,7 @@ int plot_mass(){
 
 // properties in higher mass region
 int high_mass(){
-    TFile* file = TFile::Open("data2.root");
+    TFile* file = TFile::Open("data.root");
     auto tree = (TTree*)file->Get("dim");
     int n = tree->GetEntries();
 
@@ -208,7 +228,7 @@ int high_mass(){
 
 // single muon recosntruction
 int single_reco(){
-    TFile* file = TFile::Open("data2.root");
+    TFile* file = TFile::Open("data.root");
     auto tree = (TTree*)file->Get("trk");
     int n = tree->GetEntries();
 
@@ -235,7 +255,7 @@ int single_reco(){
     }
 
     auto effi = new TEfficiency(*hist2, *hist1);
-    effi->SetTitle("mass vs. efficiency; mass (GeV/c^{2}); efficiency");
+    effi->SetTitle("momentum vs. efficiency; p (GeV/c); efficiency");
     effi->SetMarkerStyle(21);
     effi->SetMarkerColor(2);
 
@@ -247,6 +267,9 @@ int single_reco(){
 }
 
 int main(){
+
+    // combine root files
+    //com_file();
 
     //plots at vertex
     //plots_vtx();
