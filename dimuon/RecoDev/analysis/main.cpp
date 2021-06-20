@@ -99,6 +99,7 @@ int effi_plots(){
     }
 
     auto effi = new TEfficiency(*hist2, *hist1);
+    effi->SetTitle("mass vs. efficiency; mass (GeV/c^{2}); efficiency");
     effi->SetMarkerStyle(21);
     effi->SetMarkerColor(2);
 
@@ -205,19 +206,62 @@ int high_mass(){
     return 0;
 }
 
+// single muon recosntruction
+int single_reco(){
+    TFile* file = TFile::Open("data2.root");
+    auto tree = (TTree*)file->Get("trk");
+    int n = tree->GetEntries();
+
+    auto momvtx = new TVector3(0.0, 0.0, 0.0);
+    auto rec_momvtx = new TVector3(0.0, 0.0, 0.0);
+
+    tree->SetBranchAddress("momvtx", &momvtx);
+    tree->SetBranchAddress("rec_momvtx", &rec_momvtx);
+
+    auto hist1 = new TH1F("hist1",
+                          "true momentum; p (GeV/c); counts",
+                          50, 0.0, 100.0);
+
+    auto hist2 = new TH1F("hist2",
+                          "rec. momentum; p (GeV/c); counts",
+                          50, 0.0, 100.0);
+
+    for(int i = 0; i < n; i++){
+        tree->GetEntry(i);
+        hist1->Fill(momvtx->Mag());
+        if(rec_momvtx->Px() > -999.){
+            hist2->Fill(momvtx->Mag());
+        }
+    }
+
+    auto effi = new TEfficiency(*hist2, *hist1);
+    effi->SetTitle("mass vs. efficiency; mass (GeV/c^{2}); efficiency");
+    effi->SetMarkerStyle(21);
+    effi->SetMarkerColor(2);
+
+    auto can1 = new TCanvas();can1->SetGrid();
+    effi->Draw("APE1");
+    can1->SaveAs("pic13.png");
+
+    return 0;
+}
+
 int main(){
 
     //plots at vertex
     //plots_vtx();
 
     //plots of efficiency
-    //effi_plots();
+    effi_plots();
 
     // mass distributions
     //plot_mass();
 
     // high mass ditributions
-    high_mass();
+    //high_mass();
+
+    // single track efficiency
+    //single_reco();
 
     return 0;
 }
