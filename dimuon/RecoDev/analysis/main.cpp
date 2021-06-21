@@ -296,6 +296,7 @@ int compare(){
     auto can1 = new TCanvas();can1->SetGrid();
     hist1->Draw();
     hist2->Draw("same");
+    //can1->Draw();
     can1->SaveAs("pic14.png");
 
     return 0;
