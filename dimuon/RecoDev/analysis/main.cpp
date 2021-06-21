@@ -279,9 +279,11 @@ int compare(){
     auto hist1 = new TH1F("hist1",
                           "true mass; mass (GeV/c^{2}); counts",
                           20, 1.0, 10.0);
+    hist1->SetLineColor(kRed);
     auto hist2 = new TH1F("hist2",
                           "acc. mass; mass (GeV/c^{2}); counts",
                           20, 1.0, 10.0);
+    hist2->SetLineColor(kBlue);
 
     for(int i = 0; i < n; i++){
         tree->GetEntry(i);
@@ -293,7 +295,7 @@ int compare(){
 
     auto can1 = new TCanvas();can1->SetGrid();
     hist1->Draw();
-    hist1->Draw("same");
+    hist2->Draw("same");
     can1->SaveAs("pic14.png");
 
     return 0;
