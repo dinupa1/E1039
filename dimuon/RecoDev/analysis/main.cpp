@@ -154,7 +154,7 @@ int plot_mass(){
 
     auto hist1 = new TH2F("hist1",
                           "acc. mass vs. momentum; acc. mass(GeV/c^{2}); momentum (GeV/c)",
-                          20, 3.0, 9.0, 50, 20.0, 140.0);
+                          20, 3.0, 9.0, 20, 20.0, 140.0);
 
     auto hist2 = new TH2F("hist2",
                           "acc. mass vs. rec. mass; acc. mass(GeV/c^{2}); rec. mass(GeV/c^{2})",
@@ -172,11 +172,11 @@ int plot_mass(){
 
     auto can1 = new TCanvas();can1->SetGrid();
     hist1->Draw("COLZ TEXT");
-    can1->SaveAs("pic9.png");
+    //can1->SaveAs("pic9.png");
 
     auto can2 = new TCanvas();can2->SetGrid();
     hist2->Draw("COLZ TEXT");
-    can2->SaveAs("pic10.png");
+    //can2->SaveAs("pic10.png");
 
     return 0;
 }
@@ -296,8 +296,88 @@ int compare(){
     auto can1 = new TCanvas();can1->SetGrid();
     hist1->Draw();
     hist2->Draw("same");
-    //can1->Draw();
     can1->SaveAs("pic14.png");
+
+    return 0;
+}
+
+// momentum distributions
+int rec_mom(){
+    TFile* file = TFile::Open("data.root");
+    auto tree = (TTree*)file->Get("dim");
+    int n = tree->GetEntries();
+
+    double rec_mass;
+    auto pmom = new TVector3(0.0, 0.0, 0.0);
+    auto nmom = new TVector3(0.0, 0.0, 0.0);
+    auto rec_pmom = new TVector3(0.0, 0.0, 0.0);
+    auto rec_nmom = new TVector3(0.0, 0.0, 0.0);
+
+    tree->SetBranchAddress("pmom", &pmom);
+    tree->SetBranchAddress("nmom", &nmom);
+    tree->SetBranchAddress("rec_pmom", &rec_pmom);
+    tree->SetBranchAddress("rec_nmom", &rec_nmom);
+    tree->SetBranchAddress("rec_mass", &rec_mass);
+
+    auto hist1 = new TH2F("hist1",
+                          "acc. px vs. rec. px for positive track; acc. px (GeV/c); rec. px (GeV/c)",
+                          20, -4.0, +4.0, 20, -4.0, +4.0);
+
+    auto hist2 = new TH2F("hist2",
+                          "acc. px vs. rec. px for negative track; acc. px (GeV/c); rec. px (GeV/c)",
+                          20, -4.0, +4.0, 20, -4.0, +4.0);
+
+    auto hist3 = new TH2F("hist3",
+                          "acc. py vs. rec. py for positive track; acc. py (GeV/c); rec. py (GeV/c)",
+                          20, -4.0, +4.0, 20, -4.0, +4.0);
+
+    auto hist4 = new TH2F("hist4",
+                          "acc. px vs. rec. px for negative track; acc. py (GeV/c); rec. py (GeV/c)",
+                          20, -4.0, +4.0, 20, -4.0, +4.0);
+
+    auto hist5 = new TH2F("hist5",
+                          "acc. pz vs. rec. pz for postitive track; acc. pz (GeV/c); rec. pz (GeV/c)",
+                          20, 20.0, 120.0, 20, 20.0, 120.0);
+
+    auto hist6 = new TH2F("hist6",
+                          "acc. pz vs. rec. pz for negative track; acc. pz (GeV/c); rec. pz (GeV/c)",
+                          20, 20.0, 120.0, 20, 20.0, 120.0);
+
+    for(int i = 0; i < n; i++){
+        tree->GetEntry(i);
+        if(rec_mass > 0.0){
+            hist1->Fill(pmom->Px(), rec_pmom->Px());
+            hist2->Fill(nmom->Px(), rec_nmom->Px());
+            hist3->Fill(pmom->Py(), rec_pmom->Py());
+            hist4->Fill(nmom->Py(), rec_nmom->Py());
+            hist5->Fill(pmom->Pz(), rec_pmom->Pz());
+            hist6->Fill(nmom->Pz(), rec_nmom->Pz());
+        }
+    }
+
+    auto can1 = new TCanvas();can1->SetGrid();
+    hist1->Draw("colz text");
+    //can1->SaveAs("pic15.png");
+
+    auto can2 = new TCanvas();can2->SetGrid();
+    hist2->Draw("colz text");
+    //can2->SaveAs("pic16.png");
+
+    auto can3 = new TCanvas();can3->SetGrid();
+    hist3->Draw("colz text");
+    //can3->SaveAs("pic17.png");
+
+    auto can4 = new TCanvas();can4->SetGrid();
+    hist4->Draw("colz text");
+    //can4->SaveAs("pic18.png");
+
+    auto can5 = new TCanvas();can5->SetGrid();
+    hist5->Draw("colz text");
+    //can5->SaveAs("pic19.png");
+
+    auto can6 = new TCanvas();can6->SetGrid();
+    hist6->Draw("colz text");
+    //can6->SaveAs("pic20.png");
 
     return 0;
 }
@@ -314,7 +394,7 @@ int main(){
     //effi_plots();
 
     // mass distributions
-    //plot_mass();
+    plot_mass();
 
     // high mass ditributions
     //high_mass();
@@ -323,7 +403,10 @@ int main(){
     //single_reco();
 
     // compare two acceptance conditions
-    compare();
+    //compare();
+
+    // momentum distributions
+    //rec_mom();
 
     return 0;
 }
