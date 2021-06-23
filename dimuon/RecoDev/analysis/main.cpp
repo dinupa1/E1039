@@ -10,6 +10,7 @@
 #include <TH2F.h>
 #include <TChain.h>
 #include <TEfficiency.h>
+#include "events.cpp"
 #include <iostream>
 
 using namespace std;
@@ -125,13 +126,12 @@ int effi_plots(){
 
     auto can1 = new TCanvas();can1->SetGrid();
     effi->Draw("APE1");
-    can1->SaveAs("pic7.png");
+    //can1->SaveAs("pic7.png");
 
     auto can2 = new TCanvas();can2->SetGrid();
     hist1->Draw();
     hist2->Draw("same");
-    //gPad->BuildLegend(0.5,0.5,0.7,0.7,"");
-    can2->SaveAs("pic8.png");
+    //can2->SaveAs("pic8.png");
 
     return 0;
 }
@@ -394,7 +394,7 @@ int main(){
     //effi_plots();
 
     // mass distributions
-    plot_mass();
+    //plot_mass();
 
     // high mass ditributions
     //high_mass();
@@ -407,6 +407,9 @@ int main(){
 
     // momentum distributions
     //rec_mom();
+
+    // events
+    events();
 
     return 0;
 }
