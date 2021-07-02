@@ -12,6 +12,7 @@ class TTree;
 class SQHitVector;
 class SQTrackVector;
 class SQDimuonVector;
+class SQMCEvent;
 
 class AnaModule: public SubsysReco 
 {
@@ -38,6 +39,7 @@ private:
   SQHitVector* hitVector;
   SQTrackVector* trackVector;
   SQDimuonVector* dimuonVector;
+  SQMCEvent* mcEvent;
 
   SRecEvent* recEvent;
   SQTrackVector*  recTrackVector;
@@ -58,11 +60,71 @@ private:
   TVector3* mom2;
   TVector3* mom3;
   TVector3* momvtx;
+  TVector3* acc_mom;
   TVector3* rec_mom1;
   TVector3* rec_momvtx;
   TVector3* rec_posvtx;
   TVector3* rec_momtgt;
   TVector3* rec_postgt;
+
+  TVector3* mom_D0U;
+  TVector3* pos_D0U;
+  TVector3* mom_D0Up;
+  TVector3* pos_D0Up;
+  TVector3* mom_D0X;
+  TVector3* pos_D0X;
+  TVector3* mom_D0Xp;
+  TVector3* pos_D0Xp;
+  TVector3* mom_D0V;
+  TVector3* pos_D0V;
+  TVector3* mom_D0Vp;
+  TVector3* pos_D0Vp;
+
+  TVector3* mom_D2U;
+  TVector3* pos_D2U;
+  TVector3* mom_D2Up;
+  TVector3* pos_D2Up;
+  TVector3* mom_D2X;
+  TVector3* pos_D2X;
+  TVector3* mom_D2Xp;
+  TVector3* pos_D2Xp;
+  TVector3* mom_D2V;
+  TVector3* pos_D2V;
+  TVector3* mom_D2Vp;
+  TVector3* pos_D2Vp;
+
+  TVector3* mom_D3U;
+  TVector3* pos_D3U;
+  TVector3* mom_D3Up;
+  TVector3* pos_D3Up;
+  TVector3* mom_D3X;
+  TVector3* pos_D3X;
+  TVector3* mom_D3Xp;
+  TVector3* pos_D3Xp;
+  TVector3* mom_D3V;
+  TVector3* pos_D3V;
+  TVector3* mom_D3Vp;
+  TVector3* pos_D3Vp;
+
+  TVector3* pos_H1T;
+  TVector3* pos_H1B;
+  TVector3* pos_H1L;
+  TVector3* pos_H1R;
+
+  TVector3* pos_H2T;
+  TVector3* pos_H2B;
+  TVector3* pos_H2L;
+  TVector3* pos_H2R;
+
+  TVector3* pos_H3T;
+  TVector3* pos_H3B;
+  TVector3* pos_H4T;
+  TVector3* pos_H4B;
+
+  TVector3* pos_H4Y1L;
+  TVector3* pos_H4Y1R;
+  TVector3* pos_H4Y2L;
+  TVector3* pos_H4Y2R;
 
   TTree* saveTree2;
   TVector3* pmom;
