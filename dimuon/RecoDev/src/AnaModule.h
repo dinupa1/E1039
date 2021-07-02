@@ -32,6 +32,8 @@ private:
   int GetNodes(PHCompositeNode* topNode);
   void MakeTree();
   bool AllChamberPlaneHits(const int trk_id, SQHitVector *hitVector);
+  TVector3 mom_detector(SQHitVector* hitVector, SQTrack* track, const int det_id);
+  TVector3 pos_detector(SQHitVector* hitVector, SQTrack* track, const int det_id);
 
   bool legacyContainer;
 

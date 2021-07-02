@@ -719,3 +719,29 @@ bool AnaModule::AllChamberPlaneHits(const int trk_id, SQHitVector *hitVector )
     if(st1hit && st2hit && st3hit) return true;
     else return false;
 }
+
+TVector3 AnaModule::pos_detector(SQHitVector* hitVector, SQTrack* track, const int det_id){
+    int n_hits = hitVector->size();
+    int track_id = track->get_detector_id();
+
+    for(int hit = 0; hit < n_hits; hit++){
+        SQHit* sqhit = hitVector->at(hit);
+        if(sqhit->get_track_id() == track_id && sqhit->get_detector_id() == det_id){
+            return SetXYZ(sqhit->get_truth_x(), sqhit->get_truth_y(), sqhit->get_truth_y());
+        }
+    }
+
+}
+
+TVector3 AnaModule::mom_detector(SQHitVector* hitVector, SQTrack* track, const int det_id){
+    int n_hits = hitVector->size();
+    int track_id = track->get_detector_id();
+
+    for(int hit = 0; hit < n_hits; hit++){
+        SQHit* sqhit = hitVector->at(hit);
+        if(sqhit->get_track_id() == track_id && sqhit->get_detector_id() == det_id){
+            return SetXYZ(sqhit->get_truth_px(), sqhit->get_truth_py(), sqhit->get_truth_py());
+        }
+    }
+
+}
